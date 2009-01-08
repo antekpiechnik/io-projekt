@@ -29,9 +29,23 @@
 \newpage
 
 \section{Wstep}
-Projekt jest realizowany w ramach przedmiotu Inżynieria Oprogramowania. Głównym zadaniem projektu będzie utworzenie systemu typu Named Entity Recognition - wyszukiwanie konkretnego typu słów w tekscie stron WWW (takich jak nazwiska, imiona, czy pseudonimy). Projekt domyślnie ma być integralną częścią systemu SWAT. Sercem systemu ma być algorytm ewolucyjny dostosowujący 
+Projekt jest realizowany w ramach przedmiotu Inżynieria Oprogramowania. Głównym zadaniem projektu będzie utworzenie systemu typu Named Entity Recognition - wyszukiwanie konkretnego typu słów w tekscie stron WWW (takich jak nazwiska, imiona, czy pseudonimy). Projekt domyślnie ma być integralną częścią systemu SWAT. Sercem systemu ma być algorytm ewolucyjny dopasowujący wykorzystywany zestaw reguł językowych do utworzenia najoptymalniejszych kombinacji rozpoznajacych encje danego typu w tekscie. Dzieki takiemu podejsciu nie tylko algorytm wykorzysta podane reguły do stworzenia najbliższej optymalnego stanu kombinacji, ale rowniez pozwoli na latwe dodanie nowych regul do aplikacji.
 \section{Struktura projektu}
+Projekt bedzie skladal sie z nastepujacych czesci:
+\subsection{Tagger tekstow do testow}
+Aplikacja majaca na celu skanowanie przykladowych tekstow a nastepnie generowania specyficznych raportow odnosnie ilosci wystapien poszczególnych encji w tekscie. Wykorzystywane one będą następnie do badania sprawności wykorzystywanego algorytmu ewolucyjnego oraz trafności pojawiających się nowych reguł.
+\subsection{Rdzeń}
+W tej części aplikacji znajdować się będzie zaimplementowany algorytm który przekazywał będzie zestawy reguł, otrzymywał raporty dotyczące ich sprawności a następnie tworzył kolejne zestawy reguł na podstaiw otrzymanych wyników. W celu zarówno uproszczenia implementacji jak i ułatwienia dalszej rozbudowy systemu chcemy rozdzelić rdzeń aplikacji od całej reszty i nie powierzać mu zadań takich jak skanowanie tekstu.
+\subsection{Skaner - tester}
+Aplikacja po otrzymaniu konkretnego zestawu reguł będzie testowała je na paru róznego rodzaju otagowanych wcześniej tekstach a następnie generowała raporty dla Rdzenia na podstawie których będzie on mógł odpowiednio je modyfikować.
 \section{Opis algorytmu}
+\subsection{Ogólny opis}
+Algorytm ma docelowo być przykładem algorytmu ewolucyjnego który pozwoli na otrzymanie w miarę optymalnych wyników niezależnie od ilości podanych reguł. Zgodnie z przeczytanymi uprzednio artykułami efektywność tego typu rozwiązań sięga nawet 80-90 procent przy odpowiedniej ilości reguł.
+\\
+Algorytm będzie dobierał odpowiednie kombinacje reguł , rozszerzał je lub pomniejszał, zważając na dostępne o pewnego typu kombinacjach informacje (o ile takie będą już istniały), dzięki czemu ``przy zyciu`` będą pozostawały przede wszystkim skuteczne kombinacje reguł.
+\\
+Utworzona zostanie również pula słabszych rozwiązań dzięki czemu raz na pewien czas również i te kombinacje będą łączone z innymi, dzięki czemu nie będą one znikały z systemu na zawsze (czasem dwie tego typu reguły mogłyby dać dużo lepsze efekty niż inne w systemie.
+\subsection{Zastosowane reguły}
 Reguły pomagające rozpoznać nazwisko:
 \begin{itemize}
 \item Słowo ``doktor`` poprzedza nazwisko
