@@ -33,11 +33,16 @@ Projekt jest realizowany w ramach przedmiotu Inżynieria Oprogramowania. Główn
 \section{Struktura projektu}
 Projekt bedzie skladal sie z nastepujacych czesci:
 \subsection{Tagger tekstow do testow}
-Aplikacja majaca na celu skanowanie przykladowych tekstow a nastepnie generowania specyficznych raportow odnosnie ilosci wystapien poszczegolnych encji w tekscie. Wykorzystywane one będą następnie do badania sprawności wykorzystywanego algorytmu ewolucyjnego oraz trafnosci pojawiajacych się nowych reguł.
+Aplikacja majaca na celu skanowanie przykladowych tekstow a nastepnie generowania specyficznych raportow odnosnie ilosci wystapien poszczegolnych encji w tekscie. 
+Raporty generowane będą w formie sprzyjającej reszcie systemu efektywne ich użytkowanie. Wykorzystywane one będą następnie do badania sprawności wykorzystywanego algorytmu ewolucyjnego oraz trafnosci pojawiajacych się nowych reguł. 
+Tagger bazować będzie na liście danych encji, z której nie będziemy korzystać w pracy Rdzenia aplikacji.
 \subsection{Rdzen}
-W tej części aplikacji znajdować się będzie zaimplementowany algorytm który przekazywal będzie zestawy regul, otrzymywal raporty dotyczace ich sprawnosci a następnie tworzyl kolejne zestawy regul na podstaiw otrzymanych wyników. W celu zarówno uproszczenia implementacji jak i ulatwienia dalszej rozbudowy systemu chcemy rozdzelić rdzeń aplikacji od całej reszty i nie powierzać mu zadań takich jak skanowanie tekstu.
+W tej części aplikacji znajdować się będzie zaimplementowany algorytm który przekazywal będzie zestawy regul, otrzymywal raporty dotyczace ich sprawnosci a następnie tworzyl kolejne zestawy regul na podstawie otrzymanych wyników. 
+W celu zarówno uproszczenia implementacji jak i ulatwienia dalszej rozbudowy systemu chcemy odizolowac rdzeń aplikacji od całej reszty i nie powierzać mu zadań takich jak skanowanie tekstu. Pozwoli to zarazem na większe pole manewru przy wyborze języka implementacji.
+Rdzeń aplikacji uruchamiany będzie w celu przygotowania optymalnego zestawu reguł, a więc za każdym razem gdy dodane zostaną nowe reguły tudzież gdy dodane zostaną do systemu nowe teksty testowe, mające zwiększyć odporność systemu na coraz bardziej różnorodne dane wejściowe.
 \subsection{Skaner - tester}
-Aplikacja po otrzymaniu konkretnego zestawu reguł będzie testowała je na paru róznego rodzaju otagowanych wcześniej tekstach a następnie generowała rakorty dla Rdzenia na podstawie których będzie on mógł odpowiednio je modyfikować.
+Aplikacja po otrzymaniu konkretnego zestawu reguł będzie testowała je na paru róznego rodzaju otagowanych wcześniej tekstach a następnie generowała raporty dla Rdzenia na podstawie których będzie on mógł odpowiednio je modyfikować.
+Skaner będzie starał się dopasowywać kombinacje słów w tekscie do przedstawionych reguł a następnie starał się zapisać wyniki dla poszczególnych reguł (tak, aby algorytm ewolucyjny mógł sprawnie dobierać nowe reguły.
 \section{Opis algorytmu}
 \subsection{Ogolny opis}
 Algorytm ma docelowo być przykładem algorytmu ewolucyjnego który pozwoli na otrzymanie w miarę optymalnych wyników niezależnie od ilości podanych reguł.  Zgodnie z przeczytanymi uprzednio artykułami efektywność tego typu rozwiązań sięga nawet 80-90 procent przy odpowiedniej ilości reguł.Algorytm będzie dobierał odpowiednie kombinacje reguł , rozszerzał je lub pomniejszał, zważając na dostępne o pewnego typu kombinacjach informacje (o ile takie będą już istniały), dzięki czemu przy zyciu będą pozostawały przede wszystkim skuteczne kombinacje reguł. Utworzona zostanie również pula słabszych rozwiązań dzięki czemu raz na pewien czas również i te kombinacje będą łączone z innymi, dzięki czemu nie będą one znikały z systemu na zawsze (czasem dwie tego typu reguły mogłyby dać dużo lepsze efekty niż inne w systemie.
