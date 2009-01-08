@@ -35,4 +35,6 @@ in_name_corpus = _positions_satisfying_predicate(lambda w: w in NAMES)
 starts_with_capital = _positions_satisfying_predicate(
                         lambda w: w[0] == w[0].upper())
 
+authority = in_name_corpus
+
 all = [prefixes, suffixes, in_name_corpus, starts_with_capital]
