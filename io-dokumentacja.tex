@@ -29,54 +29,75 @@
 \newpage
 
 \section{Wstep}
-Projekt jest realizowany w ramach przedmiotu Inżynieria Oprogramowania. Głównym zadaniem projektu będzie utworzenie systemu typu Named Entity Recognition - wyszukiwanie konkretnego typu słów w tekscie stron WWW (takich jak nazwiska, imiona, czy pseudonimy). Projekt domyślnie ma być integralną częścią systemu SWAT. Sercem systemu ma być algorytm ewolucyjny dopasowujący wykorzystywany zestaw regul językowych do utworzenia najoptymalniejszych kombinacji rozpoznajacych encje danego typu w tekscie. Dzieki takiemu podejsciu nie tylko algorytm wykorzysta podane reguły do stworzenia najbliższej optymalnego stanu kombinacji, ale rowniez pozwoli na latwe dodanie nowych regul do aplikacji.
+Projekt jest realizowany w ramach przedmiotu Inżynieria Oprogramowania. Głównym zadaniem projektu będzie utworzenie systemu typu Named Entity Recognition - wyszukiwanie konkretnego typu słów w tekscie stron WWW (takich jak nazwiska, imiona, czy pseudonimy). 
+\\Projekt domyślnie ma być integralną częścią systemu SWAT. Sercem systemu ma być algorytm ewolucyjny dopasowujący wykorzystywany zestaw regul językowych do utworzenia najoptymalniejszych kombinacji rozpoznajacych encje danego typu w tekscie. Dzieki takiemu podejsciu nie tylko algorytm wykorzysta podane reguły do stworzenia najbliższej optymalnego stanu kombinacji, ale rowniez pozwoli na latwe dodanie nowych regul do aplikacji.
 \section{Struktura projektu}
 Projekt bedzie skladal sie z nastepujacych czesci:
 \subsection{Tagger tekstow do testow}
 Aplikacja majaca na celu skanowanie przykladowych tekstow a nastepnie generowania specyficznych raportow odnosnie ilosci wystapien poszczegolnych encji w tekscie. 
-Raporty generowane będą w formie sprzyjającej reszcie systemu efektywne ich użytkowanie. Wykorzystywane one będą następnie do badania sprawności wykorzystywanego algorytmu ewolucyjnego oraz trafnosci pojawiajacych się nowych reguł. 
+\\Raporty generowane będą w formie sprzyjającej reszcie systemu efektywne ich użytkowanie. Wykorzystywane one będą następnie do badania sprawności wykorzystywanego algorytmu ewolucyjnego oraz trafnosci pojawiajacych się nowych reguł. 
 Tagger bazować będzie na liście danych encji, z której nie będziemy korzystać w pracy Rdzenia aplikacji.
 \subsection{Generator reguł n-gramowych}
-W związku z chęcią implementacji reguł bazujących na najpopularniejszych n-gramach utworzony zostanie generator reguł który zbierze najczęściej występujące n {3,4,5} gramy występujące w bazie nazwisk przygotowanej wcześniej (do celów tagowania tekstow testowych). Generator, w celu uniknięcia zbierania nic nie znaczących n-gramów porównywał będzie nie tylko jego zawartość ale również pozycję w słowie.
+W związku z chęcią implementacji reguł bazujących na najpopularniejszych n-gramach utworzony zostanie generator reguł który zbierze najczęściej występujące n {3,4,5} gramy występujące w bazie nazwisk przygotowanej wcześniej (do celów tagowania tekstow testowych). 
+\\Generator, w celu uniknięcia zbierania nic nie znaczących n-gramów porównywał będzie nie tylko jego zawartość ale również pozycję w słowie.
 \subsection{Rdzen}
 W tej części aplikacji znajdować się będzie zaimplementowany algorytm który przekazywal będzie zestawy regul, otrzymywal raporty dotyczace ich sprawnosci a następnie tworzyl kolejne zestawy regul na podstawie otrzymanych wyników. 
-W celu zarówno uproszczenia implementacji jak i ulatwienia dalszej rozbudowy systemu chcemy odizolowac rdzeń aplikacji od całej reszty i nie powierzać mu zadań takich jak skanowanie tekstu. Pozwoli to zarazem na większe pole manewru przy wyborze języka implementacji.
-Rdzeń aplikacji uruchamiany będzie w celu przygotowania optymalnego zestawu reguł, a więc za każdym razem gdy dodane zostaną nowe reguły tudzież gdy dodane zostaną do systemu nowe teksty testowe, mające zwiększyć odporność systemu na coraz bardziej różnorodne dane wejściowe.
+\\W celu zarówno uproszczenia implementacji jak i ulatwienia dalszej rozbudowy systemu chcemy odizolowac rdzeń aplikacji od całej reszty i nie powierzać mu zadań takich jak skanowanie tekstu. Pozwoli to zarazem na większe pole manewru przy wyborze języka implementacji.
+\\Rdzeń aplikacji uruchamiany będzie w celu przygotowania optymalnego zestawu reguł, a więc za każdym razem gdy dodane zostaną nowe reguły tudzież gdy dodane zostaną do systemu nowe teksty testowe, mające zwiększyć odporność systemu na coraz bardziej różnorodne dane wejściowe.
 \subsection{Skaner - tester}
 Aplikacja po otrzymaniu konkretnego zestawu reguł będzie testowała je na paru róznego rodzaju otagowanych wcześniej tekstach a następnie generowała raporty dla Rdzenia na podstawie których będzie on mógł odpowiednio je modyfikować.
-Skaner będzie starał się dopasowywać kombinacje słów w tekscie do przedstawionych reguł a następnie starał się zapisać wyniki dla poszczególnych reguł (tak, aby algorytm ewolucyjny mógł sprawnie dobierać nowe reguły na podstawie wyników indywidualnych kombinacji zastosowanych wcześniej.
+\\Skaner będzie starał się dopasowywać kombinacje słów w tekscie do przedstawionych reguł a następnie starał się zapisać wyniki dla poszczególnych reguł (tak, aby algorytm ewolucyjny mógł sprawnie dobierać nowe reguły na podstawie wyników indywidualnych kombinacji zastosowanych wcześniej.
 \section{Opis algorytmu}
 Algorytm ma docelowo być przykładem algorytmu ewolucyjnego który pozwoli na otrzymanie w miarę optymalnych wyników, zwiększając swoją skuteczność wraz ze wzrostem zawartych w nim reguł.
 Zgodnie z przeczytanymi uprzednio artykułami efektywność tego typu rozwiązań sięga nawet 80-90 procent przy odpowiedniej ilości reguł. 
-Algorytm będzie dobierał odpowiednie ich kombinacje, rozszerzał je lub pomniejszał, zważając na dostępne o pewnego typu kombinacjach informacje (o ile takie będą już istniały), dzięki czemu ``przy zyciu`` będą pozostawały przede wszystkim skuteczne kombinacje reguł. 
-Utworzona zostanie również pula słabszych rozwiązań dzięki czemu raz na pewien czas również i te kombinacje będą łączone z innymi, dzięki czemu nie będą one znikały z systemu na zawsze (czasem dwie tego typu reguły mogłyby dać dużo lepsze efekty niż inne w systemie.
-Algorytm zawarty w Rdzeniu aplikacji będzie więc ściśle zależny od raportów generowanych przez Skaner - tester. W przypadku braku jego poprawnej implementacji nie byłby w stanie łsprawnie dobierać nowych kombinacji reguł, stając się przy tym bezużytecznym.
-Pomysł na algorytm zaczerpnięty został z artykułów wylistowanych w bibliografii niniejszej dokumentacji, z uwzględnieniem modyfikacji zespołu projektowego.
-\subsection{Zastosowane reguły}
-Reguły pomagające rozpoznać nazwisko:
+\\Algorytm będzie dobierał odpowiednie ich kombinacje, rozszerzał je lub pomniejszał, zważając na dostępne o pewnego typu kombinacjach informacje (o ile takie będą już istniały), dzięki czemu `przy zyciu` będą pozostawały przede wszystkim skuteczne kombinacje reguł. 
+\\Utworzona zostanie również pula słabszych rozwiązań dzięki czemu raz na pewien czas również i te kombinacje będą łączone z innymi, dzięki czemu nie będą one znikały z systemu na zawsze (czasem dwie tego typu reguły mogłyby dać dużo lepsze efekty niż inne w systemie.
+\\Algorytm zawarty w Rdzeniu aplikacji będzie więc ściśle zależny od raportów generowanych przez Skaner - tester. W przypadku braku jego poprawnej implementacji nie byłby w stanie sprawnie dobierać nowych kombinacji reguł, stając się przy tym bezużytecznym.
+\\Pomysł na algorytm zaczerpnięty został z artykułów wylistowanych w bibliografii niniejszej dokumentacji, z uwzględnieniem modyfikacji zespołu projektowego.
+\subsection{Zastosowane reguły (przykłady)}
+\subsection {Reguły kontekstowe}
 \begin{itemize}
 \item Słowo `doktor` poprzedza nazwisko
 \item Slowo `mgr` poprzedza nazwiso
 \item Slowo `mgr inz.` poprzedz nzwisko
+\item Reszta tytułów naukowych.
 \item Slowa `lek.`
+\item Slowo `mec.`
+\item Slowo `arch.`
+\item Reszta tytułów zawodowych.
 \item Słowo `pan` poprzedza nazwisko
 \item Słowo `pani` poprzedza nazwisko
-\item Inne tego typu tytuly
-\item Imię poprzedza nazwisko
-\item Czasownik w trzeciej osobie liczby pojedynczej następuje po nazwisku (czasownik w formie meskiej czy tez dmskiej)
-\item Nazwisko kończy się charakterystycznym sufiksem (np. `'-ski`', `'icz`')
-\item Nazwisko zaczyna się dużą literą
-\item Czasowniki takie jak `zamieszkaly`, 'urodzony`
+\item Czasownik w trzeciej osobie liczby pojedynczej następuje po nazwisku (czasownik w formie meskiej czy tez damskiej)
+\item Imiesłowy takie jak `zamieszkaly`, 'urodzony`.
 \end{itemize}
-Dzieki zastosowaniu systemu regul oraz ich automatycznej rekombinacji, bez prolemu bedzie mozna do systemu wstawiac dodatkowe reguly co usprawni jego prace oraz uswietni wyniki przez niego osiagane.
+\subsection {Reguły bazujące na innych encjach}
+\begin{itemize}
+\item Imię poprzedza nazwisko
+\item Przezwisko znajduje się na 2 gim miejscu w wyrażeniu trójsłownym (np. Antoni `Tosiek` Piechnik)
+\item Przezwisko znajduje się na 3 cim miejscu w wyrażeniu trójsłownym (np. Antoni Piechnik `Tosiek`)
+\end{itemize}
+\subsection {Reguły bazujące na regułach ortograficznych }
+\begin{itemize}
+\item Nazwisko zaczyna się dużą literą
+\item Nazwisko jest częścią dwu lub trzy wyrazowego wyrażenia w których wszystkie elementy są pisane wielką literą.
+\end{itemize}
+\subsection {Reguły n-gramowe}
+\begin{itemize}
+\item Nazwisko kończy się charakterystycznym sufiksem (np. `'-ski`', `'-<F7>icz`')
+\end{itemize}
+Dzieki zastosowaniu systemu regul oraz ich automatycznej rekombinacji, bez problemu bedzie mozna do systemu wstawiac dodatkowe reguly co usprawni jego prace oraz uswietni wyniki osiągane przez algorytm.
+\\Wielką zaletą zastosowanego algorytmu jest fakt, iż reguły tak naprawde nie muszą dokładnie precyzować wystąpień danych encji (tu nazwisk), ale jedynie sprzyjające temu warunki (które w połączeniu z innymi warunkami mogą definiować reguły na które osoba implementująca zwykły - nie ewolucyjny - system mogłaby nie zwrócić uwagi).
 
 \section{Zastosowane technologie}
-Do implementacji znacznej czesci aplikacji pragniemy wykorzystac jezyk Python, ze wzgledu na jego perfekcyjnie zastosowania przy prztwarzaniu jezyka naturalnego. Jak do tego pory:
-\subsection {Tagger} - Wykonano wstepny projekt taggera w Pythonie na potrzeby testowe.
-\subsection {Rdzen} - Rozpoczeto prace  w Pythonie
-\section{Opis zastosowanych narzedzi}
-\subsection{Jython} - bridge pozwalajacy n transparentna komunikacje miedzy Pythonem a klasami Javy.
-\subsection{CLP} - 
+Do implementacji znacznej czesci aplikacji pragniemy wykorzystac jezyk Python, ze wzgledu na jego perfekcyjne przystosowanie do prac nad prztwarzaniem jezyka naturalnego.
+Oczywiście za pomocą pewnych narzędzi będziemy się starali powiązać go z obecną architekturą systemu, napisanego w dużej części w języku Java.
+\subsection {Tagger} 
+Wykonano wstepny prototyp taggera w Pythonie na potrzeby testowe.
+\subsection {Rdzen} 
+Rozpoczeto prace  w Pythonie. Dodatkowo będziemy jak najszybciej starali się skorzystać z Jythona.
+\section{Zastosowane narzedzia}
+\subsection{Jython} Bridge pozwalajacy na transparentna komunikacje miedzy Pythonem a klasami Javy. Będzie niezmiernie przydatny do komunikacji Rdzenia aplikacji napisanego w pythonie z obecna architektura systemu.
+\subsection{CLP}
 
 
 
