@@ -1,2 +1,4 @@
 io-dokumentacja.pdf
 *.pyc
+*.swp
+data/ngrams_distribution.dat

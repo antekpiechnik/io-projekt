@@ -60,7 +60,7 @@ def store_data():
     filename = "data/ngrams_distribution.dat"
     if os.path.exists(filename):
         os.remove(filename)
-    conn = sqlite3.connect('data/ngrams_distribution.dat')
+    conn = sqlite3.connect(filename)
     c = conn.cursor()
 
     c.execute("create table ngrams (name text, pos text, pop int, length int)")
