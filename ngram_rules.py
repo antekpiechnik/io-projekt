@@ -13,7 +13,7 @@ def retrieve_ngrams():
         conn = sqlite3.connect(filename)
         c = conn.cursor()
         for length in [3, 4, 5]:
-            c.execute('select name, pop, length from ngrams where length=? order by pop desc limit 5', (length,))
+            c.execute('select name, pos, pop, length from ngrams where length=? order by pop desc limit 5', (length,))
             for (ngram, pos, pop, length) in c.fetchall():
                 ret.add((ngram, pos))
     return ret
