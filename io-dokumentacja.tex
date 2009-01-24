@@ -97,8 +97,66 @@ Wykonano wstepny prototyp taggera w Pythonie na potrzeby testowe.
 Rozpoczeto prace  w Pythonie. Dodatkowo będziemy jak najszybciej starali się skorzystać z Jythona.
 \section{Zastosowane narzedzia}
 \subsection{Jython} Bridge pozwalajacy na transparentna komunikacje miedzy Pythonem a klasami Javy. Będzie niezmiernie przydatny do komunikacji Rdzenia aplikacji napisanego w pythonie z obecna architektura systemu.
-\subsection{CLP}
+
+\section{Opis powiazania aplikacji z Interfejsem IQuantumDetector z projektu SWAT}
+\subsection{Kod od strony aplikacji w Javie}
+\begin{verbatim}
+import org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector;
+import jyinterface.factory.JythonFactory;
+import org.ppbw.agh.swat.hoover.smith.lexer.HtmlLexer; 
+import org.ppbw.agh.swat.hoover.smith.lexer.IResourceLexer; 
+import org.ppbw.agh.swat.hoover.smith.quantum.detection.DetectedQuantum; 
+import org.ppbw.agh.swat.hoover.smith.resourceModel.IContentSegment; 
+import org.ppbw.agh.swat.hoover.smith.resourceModel.IResourceModel; 
+import org.ppbw.agh.swat.hoover.smith.stemmer.StemmerPL; 
+import java.io.ByteArrayInputStream; 
+
+public class Main {
+	public static void main(String[] args) throws Exception {
+		String shortName = "org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector";
+		Object obj = JythonFactory.getJythonObject(shortName, "test.py", "InternetDetector");
+		IQuantumDetector detector = (IQuantumDetector) obj;
+		HtmlLexer lexer = new HtmlLexer();
+		IResourceModel resourceModel = 
+			lexer.buildResourceModel(new ByteArrayInputStream("Internet Internet internet ze szkoda gadać".getBytes("UTF-8")), 
+						 "utf-8",
+						 new StemmerPL());
+
+		for (IContentSegment s : resourceModel.getLeafSegments()) {
+			System.out.println(detector.detectQuantums(s).toString());
+		}
+	}
+}
+
+\end{verbatim}
+
+\subsection{Kod testowy implementujacy test z przykladowego pliku w Pythonie}
+\begin{verbatim}
+from java.io import ByteArrayInputStream
+from java.util import ArrayList
+
+from org.ppbw.agh.swat.hoover.smith.lexer import HtmlLexer, IResourceLexer
+from org.ppbw.agh.swat.hoover.smith.quantum import QuantumType
+from org.ppbw.agh.swat.hoover.smith.quantum.detection import DetectedQuantum, DetectorType, IQuantumDetector
+from org.ppbw.agh.swat.hoover.smith.resourceModel import IContentSegment, IResourceModel
+from org.ppbw.agh.swat.hoover.smith.stemmer import StemmerPL
 
 
+#from unittest import main, TestCase
 
+
+class InternetDetector(IQuantumDetector):
+    def getType(self):
+        return DetectorType.DetectionInLeafSegment
+
+    def detectQuantums(self, leafSegment):
+        dq = []
+        for word_id in range(leafSegment.getWordsCount()):
+            if leafSegment.compareWord(word_id, "Internet"):
+                dq.append(DetectedQuantum(leafSegment.getWordToken(word_id), QuantumType.NICKNAME))
+                print leafSegment.getWordToken(word_id).tokenContent
+        return ArrayList(dq)
+
+
+\end{verbatim}
 \end{document}
