@@ -3,3 +3,4 @@ io-dokumentacja.pdf
 *.swp
 data/ngrams_distribution.dat
 .DS_Store
+java-interop/cachedir

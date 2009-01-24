@@ -3,9 +3,15 @@ import sqlite3
 
 def get_names():
     f = open("data/uniquesurnames.utf8.txt", "r")
-    c = f.read().decode("utf-8")
+    lines = f.read().decode("utf-8").split("\n")
     f.close()
-    return dict(reversed(line.split(None, 1)) for line in c.split("\n") if line)
+    def name_and_arity(lines):
+        for line in lines:
+            if line:
+                arity, name = line.split(None, 1)
+                yield (name.lower(), arity)
+
+    return dict(name_and_arity(lines))
 
 def ngrams_gen(x):
     def ngrams(string):
