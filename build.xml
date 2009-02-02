@@ -3,16 +3,17 @@
     NER Algorithms
   </description>
 
-  <path id="libpath">
-    <pathelement path="${classpath}"/>
-    <pathelement location="java-lib/detectors.jar"/>
-    <pathelement location="java-lib/jython.jar"/>
-    <pathelement location="java-lib/egothor.jar"/>
-    <pathelement location="java-lib/morfologik-stemming.jar"/>
-  </path>
-
   <property name="src" location="java-src"/>
   <property name="build" location="java-classes"/>
+  <property name="lib" location="java-lib"/>
+
+  <path id="libpath">
+		<fileset dir="${lib}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+	<target name="all" depends="compile,doc"/>
 
   <target name="init">
     <tstamp/>
@@ -21,6 +22,11 @@
 
   <target name="compile" depends="init" description="compile the source " >
     <javac srcdir="${src}" destdir="${build}" classpathref="libpath"/>
+		<copy todir="${build}/resources">
+			<fileset dir="${src}/resources">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
   </target>
 
   <target name="clean" description="clean up" >
@@ -34,6 +40,14 @@
 		<exec executable="make" dir="doc"/>
 	</target>
 
-	<target name="all" depends="compile,doc"/>
+	<target name="run" depends="compile">
+		<java classname="agh.io.Main">
+			<classpath id="runpath">
+				<path refid="libpath"/>
+				<pathelement path="${build}"/>
+			</classpath>
+		</java>
+
+	</target>
 
 </project>
