@@ -13,7 +13,7 @@ import java.io.ByteArrayInputStream;
 public class Main {
 	public static void main(String[] args) throws Exception {
 		String shortName = "org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector";
-		Object obj = JythonFactory.getJythonObject(shortName, "interop_test.py", "InternetDetector");
+		Object obj = JythonFactory.getJythonObject(shortName, "pyner/trivial_detector.py", "InternetDetector");
 		IQuantumDetector detector = (IQuantumDetector) obj;
 		HtmlLexer lexer = new HtmlLexer();
 		IResourceModel resourceModel = 
