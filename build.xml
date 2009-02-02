@@ -1,0 +1,39 @@
+<project name="SWAT" default="all" basedir=".">
+  <description>
+    NER Algorithms
+  </description>
+
+  <path id="libpath">
+    <pathelement path="${classpath}"/>
+    <pathelement location="java-lib/detectors.jar"/>
+    <pathelement location="java-lib/jython.jar"/>
+    <pathelement location="java-lib/egothor.jar"/>
+    <pathelement location="java-lib/morfologik-stemming.jar"/>
+  </path>
+
+  <property name="src" location="java-src"/>
+  <property name="build" location="java-classes"/>
+
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init" description="compile the source " >
+    <javac srcdir="${src}" destdir="${build}" classpathref="libpath"/>
+  </target>
+
+  <target name="clean" description="clean up" >
+    <delete dir="${build}"/>
+		<exec executable="make" dir="doc">
+			<arg value="clean"/>
+		</exec>
+  </target>
+
+	<target name="doc">
+		<exec executable="make" dir="doc"/>
+	</target>
+
+	<target name="all" depends="compile,doc"/>
+
+</project>
