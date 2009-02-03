@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import with_statement
 
 import re
 from ngrams import get_names, ngrams_gen
@@ -11,9 +12,9 @@ class arity_dict(dict):
         for x in seq:
             self.inc(x)
 
-def get_corpus():
-    f = open("data/korpus-pap-part.iso.txt")
-    content = f.read().decode("iso-8859-2")
+def get_corpus(name="data/korpus-pap-part.iso.txt", encoding="iso-8859-2"):
+    f = open(name)
+    content = f.read().decode(encoding)
     f.close()
     return content
 
@@ -36,30 +37,22 @@ def main():
     names = get_names()
 
     prevs = arity_dict()
-    prevs4 = arity_dict()
     nexts = arity_dict()
-    nexts4 = arity_dict()
-    mdls = arity_dict()
 
     for phrase in re.split(r"\n\n|[.;?!]", content):
         for prev_word, middle, next_word in triplewise(re.split(r"[ ,]", phrase)):
             if middle.lower() in names:
-                prevs.count(triplewise(prev_word.lower()))
-                nexts.count(triplewise(next_word.lower()))
                 if len(prev_word) > 3:
-                    prevs4.count(triplewise(prev_word.lower()))
+                    prevs.count(triplewise(prev_word.lower()))
                 if len(next_word) > 3:
-                    nexts4.count(triplewise(next_word.lower()))
-                mdls.count(triplewise(middle.lower()))
+                    nexts.count(triplewise(next_word.lower()))
  
-    print
-    zip_print(pprint(top(prevs), 'prevs'),
-            pprint(top(prevs4), 'prevs4'))
-    print
-    zip_print(pprint(top(nexts), 'nexts'),
-            pprint(top(nexts4), 'nexts4'))
-    for x in pprint(top(mdls), 'middles'):
-        print x
+    with open("ngrams.dat", "w") as f:
+        for line in top(prevs):
+            print >>f, line[0].encode("utf-8")
+        print >>f, '--'
+        for line in top(nexts):
+            print >>f, line[0].encode("utf-8")
 
 if __name__ == "__main__":
     main()

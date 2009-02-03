@@ -12,17 +12,22 @@ import java.io.ByteArrayInputStream;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
+
+        String text = "Czesław  ma w domu kota. Pan Nowak nie lubi tego kota. Roman Giertych zdobywał wiedzę w Oksfordzie. ";
+
 		String shortName = "org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector";
-		Object obj = JythonFactory.getJythonObject(shortName, "pyner/trivial_detector.py", "InternetDetector");
+		Object obj = JythonFactory.getJythonObject(shortName, "pyner/ngrams_detector.py", "NgramsDetector");
 		IQuantumDetector detector = (IQuantumDetector) obj;
 		HtmlLexer lexer = new HtmlLexer();
 		IResourceModel resourceModel = 
-			lexer.buildResourceModel(new ByteArrayInputStream("Internet Internet internet ze szkoda gadać".getBytes("UTF-8")), 
+			lexer.buildResourceModel(new ByteArrayInputStream(text.getBytes("UTF-8")), 
 						 "utf-8",
 						 new StemmerPL());
 
 		for (IContentSegment s : resourceModel.getLeafSegments()) {
-			System.out.println(detector.detectQuantums(s).toString());
+            for (DetectedQuantum dq : detector.detectQuantums(s)) {
+                System.out.println(dq.quantum.getContent());
+            }
 		}
 	}
 }

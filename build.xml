@@ -41,6 +41,9 @@
 	</target>
 
 	<target name="run" depends="compile">
+		<exec executable="python" dir=".">
+			<arg value="pyner/ngrams_neighbours.py"/>
+		</exec>
 		<java classname="agh.io.Main">
 			<classpath id="runpath">
 				<path refid="libpath"/>

@@ -1,0 +1,1 @@
+przy wejściu kończącym się literą ostatnie słowo nie jest tokenowane

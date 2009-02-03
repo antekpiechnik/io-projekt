@@ -19,6 +19,14 @@ def ngrams_gen(x):
             yield string[i:i + x]
     return ngrams
 
+def ngrams_list(x):
+    def ngrams(string):
+        yld = []
+        for i in range(len(string) - (x - 1)):
+            yld.append(string[i:i + x])
+        return yld
+    return ngrams
+
 def test_ngrams():
     trigrams = ngrams_gen(3)
     assert list(trigrams("abcde")) == "abc bcd cde".split()
