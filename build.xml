@@ -49,6 +49,7 @@
 				<path refid="libpath"/>
 				<pathelement path="${build}"/>
 			</classpath>
+			<sysproperty key="python.path" value="python-lib"/>
 		</java>
 
 	</target>

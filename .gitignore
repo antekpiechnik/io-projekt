@@ -4,3 +4,6 @@ io-dokumentacja.pdf
 data/ngrams_distribution.dat
 .DS_Store
 java-classes
+java-lib/cachedir
+python-lib/*$py.class
+python-lib/**/*$py.class

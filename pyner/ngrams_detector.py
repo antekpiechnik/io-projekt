@@ -15,7 +15,7 @@ from org.ppbw.agh.swat.hoover.smith.stemmer import StemmerPL
 ngrams_before = ['']
 ngrams_after = ['']
 f = open("ngrams.dat", "r")
-content = f.read()
+content = f.read().decode("utf-8")
 before, after = content.split("--")
 f.close()
 ngrams_before = before.split()
