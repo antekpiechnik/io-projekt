@@ -13,7 +13,7 @@ import java.io.ByteArrayInputStream;
 public class Main {
 	public static void main(String[] args) throws Exception {
 
-        String text = "Czesław  ma w domu kota. Pan Nowak nie lubi tego kota. Roman Giertych zdobywał wiedzę w Oksfordzie. ";
+        String text = "Ania Pies ma w domu kota. Pan Nowak nie lubi tego kota. Roman Giertych wierzy w swoje racje. ";
 
 		String shortName = "org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector";
 		Object obj = JythonFactory.getJythonObject(shortName, "pyner/ngrams_detector.py", "NgramsDetector");

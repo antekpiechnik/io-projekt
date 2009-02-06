@@ -9,11 +9,6 @@ from org.ppbw.agh.swat.hoover.smith.quantum.detection import DetectedQuantum, De
 from org.ppbw.agh.swat.hoover.smith.resourceModel import IContentSegment, IResourceModel
 from org.ppbw.agh.swat.hoover.smith.stemmer import StemmerPL
 
-
-#from unittest import main, TestCase
-
-ngrams_before = ['']
-ngrams_after = ['']
 f = open("ngrams.dat", "r")
 content = f.read().decode("utf-8")
 before, after = content.split("--")
@@ -31,9 +26,9 @@ class NgramsDetector(IQuantumDetector):
             prev_word = leafSegment.getWordToken(word_id - 1).tokenContent
             next_word = leafSegment.getWordToken(word_id + 1).tokenContent
             for ngram in ngrams_before:
-                if ngram in prev_word:
+                if ngram in prev_word.lower():
                     dq[word_id] = DetectedQuantum(leafSegment.getWordToken(word_id), QuantumType.SURNAME)
             for ngram in ngrams_after:
-                if ngram in next_word:
+                if ngram in next_word.lower():
                     dq[word_id] = DetectedQuantum(leafSegment.getWordToken(word_id), QuantumType.SURNAME)
         return ArrayList(dq.values())
