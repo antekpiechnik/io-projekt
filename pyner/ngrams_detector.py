@@ -1,7 +1,6 @@
-#encoding=utf-8
-
 from java.io import ByteArrayInputStream
 from java.util import ArrayList
+from java.lang import System
 
 from org.ppbw.agh.swat.hoover.smith.lexer import HtmlLexer, IResourceLexer
 from org.ppbw.agh.swat.hoover.smith.quantum import QuantumType
@@ -9,8 +8,11 @@ from org.ppbw.agh.swat.hoover.smith.quantum.detection import DetectedQuantum, De
 from org.ppbw.agh.swat.hoover.smith.resourceModel import IContentSegment, IResourceModel
 from org.ppbw.agh.swat.hoover.smith.stemmer import StemmerPL
 
+
+ENC = System.getProperty("file.encoding")
 f = open("ngrams.dat", "r")
-content = f.read().decode("utf-8")
+content = f.read()
+content = content.decode(ENC)
 before, after = content.split("--")
 f.close()
 ngrams_before = before.split()
@@ -26,9 +28,9 @@ class NgramsDetector(IQuantumDetector):
             prev_word = leafSegment.getWordToken(word_id - 1).tokenContent
             next_word = leafSegment.getWordToken(word_id + 1).tokenContent
             for ngram in ngrams_before:
-                if ngram in prev_word.lower():
+                if ngram in prev_word:
                     dq[word_id] = DetectedQuantum(leafSegment.getWordToken(word_id), QuantumType.SURNAME)
             for ngram in ngrams_after:
-                if ngram in next_word.lower():
+                if ngram in next_word:
                     dq[word_id] = DetectedQuantum(leafSegment.getWordToken(word_id), QuantumType.SURNAME)
         return ArrayList(dq.values())
