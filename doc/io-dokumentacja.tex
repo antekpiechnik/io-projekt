@@ -29,7 +29,7 @@
 \newpage
 
 \section{Wstęp}
-Projekt został zrealizowany w ramach przedmiotu Inżynieria Oprogramowania. Głównym zadaniem projektu będzie utworzenie systemu typu Named Entity Recognition - wyszukiwanie konkretnego typu słów w tekście stron WWW (takich jak nazwiska, imiona, czy pseudonimy). 
+Projekt został zrealizowany w ramach przedmiotu Inżynieria Oprogramowania. Głównym zadaniem projektu będzie utworzenie systemu typu Named Entity Recognition - wyszukiwanie konkretnego typu słów w tekście stron WWW (takich jak nazwiska, imiona, czy pseudonimy).
 \\Projekt domyślnie ma być integralną częścią systemu SWAT. Sercem systemu jest algorytm łączący zestawy reguł językowych do utworzenia optymalnych kombinacji rozpoznających encje danego typu w tekście. Dzięki takiemu podejściu nie tylko wykorzystuje podane reguły do stworzenia mozliwie najlepszej kombinacji, ale również pozwoli na łatwe dodanie nowych reguł do aplikacji.
 
 \section{Struktura systemu}
@@ -87,33 +87,34 @@ W tej części aplikacji znajduje się zaimplementowany algorytm który aplikuje
 \subsection {Reguły n-gramowe}
 \begin{itemize}
 \item Nazwisko kończy się charakterystycznym sufiksem (np. `'-ski`', `'-icz`')
+\item Pozostałe reguły generowane poprzez system
 \end{itemize}
 Dzięki zastosowaniu systemu reguł oraz ich kombinacji, bez problemu będzie można do systemu wstawiać dodatkowe reguły co usprawni jego prace oraz uświetni wyniki osiągane przez algorytm.
 \\Wielką zaletą zastosowanego algorytmu jest fakt, iż reguły tak naprawdę nie muszą dokładnie precyzować wystąpień danych encji (tu nazwisk), ale jedynie sprzyjające temu warunki (które w połączeniu z innymi warunkami mogą definiować reguły).
 
-\section{Zastosowane technologie}
+\section {Zastosowane technologie}
 Do implementacji znacznej części aplikacji wykorzystano język Python, ze względu na jego perfekcyjne przystosowanie do prac nad przetwarzaniem języka naturalnego.
 \\W związku z faktem, iż projekt SWAT jest napisany w języku Java, należało wykorzystać swojego rodzaju pomost pomiędzy naszą częścią aplikacji a dotychczasowymi interfejsami wyszukiwania encji w tekstach. W tym celu wykorzystaliśmy Jythona, czyli implementację języka Python napisaną w języku Java.
 \\Poza Jythonem korzystaliśmy z funkcji wbudowanych w język Python, związanych z przetwarzaniem tekstu oraz konwersją między różnego rodzaju kodowaniem (pozwalająca na komunikację oraz transfer danych z poziomu Javy do Pythona i na odwrót).
 
-\section{Opis zastosowanych narzędzi}
+\section {Opis zastosowanych narzędzi}
 
-\subsection{Jython} 
+\subsection {Jython} 
 Implementacja języka Python w Javie pozwalający na transparentna komunikacje miedzy Pythonem a klasami Javy. Okazał się niezastąpiony przy wiązaniu aplikacji Rdzenia z dotychczasowymi interfejsami projektu SWAT. 
 \\Dzięki wykorzystaniu zewnętrznych bibliotek związanych m.in. z kodowaniem udało się bez najmniejszych problemów wywoływać klasy napisane w Rdzeniu (w Pythonie) z poziomu Javy, jak również importować wszelakie pakiety projektu SWAT do kodu aplikacji w Pythonie.
 \\Wiecej informacji na stronie Jythona: www.jython.org
 
-\subsection(encodings)
+\subsection{encodings}
 Moduł Pythona zawierający zbiór najważniejszych i najpopularniejszych kodowań oraz metod z nimi związanych.
 \\Dzięki niemu udało się rozwiązać problem związany z komunikacją (w szczególności przesyłaniem polskich znaków z obiektów Javy do obiektów Pythona)
 
-\subsection(egothor)
+\subsection{egothor}
 Silnik full-text search z którego korzystaliśmy przy tworzeniu systemu.
 \\Wiecej informacji na stronie: http://www.egothor.org/
 
-\subsection(Morfologik)
+\subsection{Morfologik}
 Analizator morfologiczny, słownik morfologiczny, korektor gramatyczny.
-\\\Wiecej informacji na stronie: http://morfologik.blogspot.com/
+\\Wiecej informacji na stronie: http://morfologik.blogspot.com/
 
 \section{Opis powiazania aplikacji z Interfejsem IQuantumDetector z projektu SWAT}
 Należy zaimportować odpowiednie pakiety do kodu w Javie a następnie wykorzystać metodę getJythonObject
@@ -186,6 +187,6 @@ Kontakt z autorami systemu:
 \begin{itemize}
 \item Konrad Delong - konryd <at> gmail.com
 \item Antoni Piechnik - antek.piechnik <at> gmail.com
-\end
+\end{itemize}
 
 \end{document}
