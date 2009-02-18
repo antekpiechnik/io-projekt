@@ -21,142 +21,172 @@
 \rfoot{\thepage}
 
 \author{Konrad Delong \and Antek Piechnik}
-\title{Inżynieria Oprogramowania - Dokumentacja}
+\title{PyNER - Dokumentacja}
 
 \begin{document}
 \maketitle
 \tableofcontents
 \newpage
 
-\section{Wstep}
-Projekt jest realizowany w ramach przedmiotu Inżynieria Oprogramowania. Głównym zadaniem projektu będzie utworzenie systemu typu Named Entity Recognition - wyszukiwanie konkretnego typu słów w tekscie stron WWW (takich jak nazwiska, imiona, czy pseudonimy). 
-\\Projekt domyślnie ma być integralną częścią systemu SWAT. Sercem systemu ma być algorytm ewolucyjny dopasowujący wykorzystywany zestaw regul językowych do utworzenia najoptymalniejszych kombinacji rozpoznajacych encje danego typu w tekscie. Dzieki takiemu podejsciu nie tylko algorytm wykorzysta podane reguły do stworzenia najbliższej optymalnego stanu kombinacji, ale rowniez pozwoli na latwe dodanie nowych regul do aplikacji.
-\section{Struktura projektu}
-Projekt bedzie skladal sie z nastepujacych czesci:
-\subsection{Tagger tekstow do testow}
-Aplikacja majaca na celu skanowanie przykladowych tekstow a nastepnie generowania specyficznych raportow odnosnie ilosci wystapien poszczegolnych encji w tekscie. 
-\\Raporty generowane będą w formie sprzyjającej reszcie systemu efektywne ich użytkowanie. Wykorzystywane one będą następnie do badania sprawności wykorzystywanego algorytmu ewolucyjnego oraz trafnosci pojawiajacych się nowych reguł. 
-Tagger bazować będzie na liście danych encji, z której nie będziemy korzystać w pracy Rdzenia aplikacji.
+\section{Wstęp}
+Projekt został zrealizowany w ramach przedmiotu Inżynieria Oprogramowania. Głównym zadaniem projektu będzie utworzenie systemu typu Named Entity Recognition - wyszukiwanie konkretnego typu słów w tekście stron WWW (takich jak nazwiska, imiona, czy pseudonimy).
+\\Projekt domyślnie ma być integralną częścią systemu SWAT. Sercem systemu jest algorytm łączący zestawy reguł językowych do utworzenia optymalnych kombinacji rozpoznających encje danego typu w tekście. Dzięki takiemu podejściu nie tylko wykorzystuje podane reguły do stworzenia mozliwie najlepszej kombinacji, ale również pozwoli na łatwe dodanie nowych reguł do aplikacji.
+
+\section{Struktura systemu}
+System składa się z następujących części:
+
+\subsection{Tagger tekstów do testów}
+Skrypt mający na celu skanowanie przykładowych tekstów a następnie generowania specyficznych raportów odnośnie ilości wystąpień poszczególnych encji w tekście.
+\\Dzięki skryptowi będzie możliwe przygotowanie tekstów odpornych na konkretne reguły, oraz zwiększenie możliwości testowania aplikacji.
+\\Tagger bazować będzie na liście danych encji (np. bazie nazwisk), z której nie będziemy korzystać w pracy Rdzenia aplikacji.
+
 \subsection{Generator reguł n-gramowych}
-W związku z chęcią implementacji reguł bazujących na najpopularniejszych n-gramach utworzony zostanie generator reguł który zbierze najczęściej występujące n {3,4,5} gramy występujące w bazie nazwisk przygotowanej wcześniej (do celów tagowania tekstow testowych). 
+W związku z chęcią implementacji reguł bazujących na najpopularniejszych n-gramach utworzony został generator reguł który zbiera najczęściej występujące n {3,4,5} gramy występujące w tekstach przed nazwiskami oraz po, które posłużą za wykładnię do łączenia reguł.
+\\Do tworzenia list n-gramów potrzebny jest odpowiedni korpus zawierający nazwiska, jak i również ich baza, dzięki której można je wykrywać w tekście.
 \\Generator, w celu uniknięcia zbierania nic nie znaczących n-gramów porównywał będzie nie tylko jego zawartość ale również pozycję w słowie.
-\subsection{Rdzen}
-W tej części aplikacji znajdować się będzie zaimplementowany algorytm który przekazywal będzie zestawy regul, otrzymywal raporty dotyczace ich sprawnosci a następnie tworzyl kolejne zestawy regul na podstawie otrzymanych wyników. 
-\\W celu zarówno uproszczenia implementacji jak i ulatwienia dalszej rozbudowy systemu chcemy odizolowac rdzeń aplikacji od całej reszty i nie powierzać mu zadań takich jak skanowanie tekstu. Pozwoli to zarazem na większe pole manewru przy wyborze języka implementacji.
-\\Rdzeń aplikacji uruchamiany będzie w celu przygotowania optymalnego zestawu reguł, a więc za każdym razem gdy dodane zostaną nowe reguły tudzież gdy dodane zostaną do systemu nowe teksty testowe, mające zwiększyć odporność systemu na coraz bardziej różnorodne dane wejściowe.
-\subsection{Skaner - tester}
-Aplikacja po otrzymaniu konkretnego zestawu reguł będzie testowała je na paru róznego rodzaju otagowanych wcześniej tekstach a następnie generowała raporty dla Rdzenia na podstawie których będzie on mógł odpowiednio je modyfikować.
-\\Skaner będzie starał się dopasowywać kombinacje słów w tekscie do przedstawionych reguł a następnie starał się zapisać wyniki dla poszczególnych reguł (tak, aby algorytm ewolucyjny mógł sprawnie dobierać nowe reguły na podstawie wyników indywidualnych kombinacji zastosowanych wcześniej.
-\section{Opis algorytmu}
-Algorytm ma docelowo być przykładem algorytmu ewolucyjnego który pozwoli na otrzymanie w miarę optymalnych wyników, zwiększając swoją skuteczność wraz ze wzrostem zawartych w nim reguł.
-Zgodnie z przeczytanymi uprzednio artykułami efektywność tego typu rozwiązań sięga nawet 80-90 procent przy odpowiedniej ilości reguł. 
-\\Algorytm będzie dobierał odpowiednie ich kombinacje, rozszerzał je lub pomniejszał, zważając na dostępne o pewnego typu kombinacjach informacje (o ile takie będą już istniały), dzięki czemu `przy zyciu` będą pozostawały przede wszystkim skuteczne kombinacje reguł. 
-\\Utworzona zostanie również pula słabszych rozwiązań dzięki czemu raz na pewien czas również i te kombinacje będą łączone z innymi, dzięki czemu nie będą one znikały z systemu na zawsze (czasem dwie tego typu reguły mogłyby dać dużo lepsze efekty niż inne w systemie.
-\\Algorytm zawarty w Rdzeniu aplikacji będzie więc ściśle zależny od raportów generowanych przez Skaner - tester. W przypadku braku jego poprawnej implementacji nie byłby w stanie sprawnie dobierać nowych kombinacji reguł, stając się przy tym bezużytecznym.
-\\Pomysł na algorytm zaczerpnięty został z artykułów wylistowanych w bibliografii niniejszej dokumentacji, z uwzględnieniem modyfikacji zespołu projektowego.
+
+\subsection{Rdzeń}
+W tej części aplikacji znajduje się zaimplementowany algorytm który aplikuje przygotowane i wygenerowane reguły do wyszukiwania nazwisk w tekście.
+\\Przygotowanych została konkretna liczba reguł, oraz ich przykładowe kombinacje dzięki którym będzie można porównywać ich efektywność na tekstach przykładowych.
+\\Rdzeń pobiera również odpowiednie listy n-gramów o różnej długości, wygenerowane uprzednio przez Generatora reguł n-gramowych.
+\\Rdzeń został napisany w języku Python, dzięki czemu wyjątkowo proste jest ewentualne dodanie dodatkowych reguł.
+
+\section{Opis działania aplikacji}
+
 \subsection{Zastosowane reguły (przykłady)}
+
 \subsection {Reguły kontekstowe}
 \begin{itemize}
 \item Słowo `doktor` poprzedza nazwisko
-\item Slowo `mgr` poprzedza nazwiso
-\item Slowo `mgr inz.` poprzedz nzwisko
+\item Słowo `mgr` poprzedza nazwisko
+\item Słowo `mgr inż.` poprzedza nazwisko
 \item Reszta tytułów naukowych.
-\item Slowa `lek.`
-\item Slowo `mec.`
-\item Slowo `arch.`
+\item Słowo `lek.`
+\item Słowo `mec.`
+\item Słowo `arch.`
 \item Reszta tytułów zawodowych.
 \item Słowo `pan` poprzedza nazwisko
 \item Słowo `pani` poprzedza nazwisko
-\item Czasownik w trzeciej osobie liczby pojedynczej następuje po nazwisku (czasownik w formie meskiej czy tez damskiej)
-\item Imiesłowy takie jak `zamieszkaly`, 'urodzony`.
+\item Czasownik w trzeciej osobie liczby pojedynczej następuje po nazwisku (czasownik w formie męskiej czy tez damskiej)
+\item Imiesłowy takie jak `zamieszkały`, 'urodzony`.
 \end{itemize}
+
 \subsection {Reguły bazujące na innych encjach}
 \begin{itemize}
 \item Imię poprzedza nazwisko
 \item Przezwisko znajduje się na 2 gim miejscu w wyrażeniu trójsłownym (np. Antoni `Tosiek` Piechnik)
 \item Przezwisko znajduje się na 3 cim miejscu w wyrażeniu trójsłownym (np. Antoni Piechnik `Tosiek`)
 \end{itemize}
+
 \subsection {Reguły bazujące na regułach ortograficznych }
 \begin{itemize}
 \item Nazwisko zaczyna się dużą literą
 \item Nazwisko jest częścią dwu lub trzy wyrazowego wyrażenia w których wszystkie elementy są pisane wielką literą.
 \end{itemize}
+
 \subsection {Reguły n-gramowe}
 \begin{itemize}
-\item Nazwisko kończy się charakterystycznym sufiksem (np. `'-ski`', `'-<F7>icz`')
+\item Nazwisko kończy się charakterystycznym sufiksem (np. `'-ski`', `'-icz`')
+\item Pozostałe reguły generowane poprzez system
 \end{itemize}
-Dzieki zastosowaniu systemu regul oraz ich automatycznej rekombinacji, bez problemu bedzie mozna do systemu wstawiac dodatkowe reguly co usprawni jego prace oraz uswietni wyniki osiągane przez algorytm.
-\\Wielką zaletą zastosowanego algorytmu jest fakt, iż reguły tak naprawde nie muszą dokładnie precyzować wystąpień danych encji (tu nazwisk), ale jedynie sprzyjające temu warunki (które w połączeniu z innymi warunkami mogą definiować reguły na które osoba implementująca zwykły - nie ewolucyjny - system mogłaby nie zwrócić uwagi).
+Dzięki zastosowaniu systemu reguł oraz ich kombinacji, bez problemu będzie można do systemu wstawiać dodatkowe reguły co usprawni jego prace oraz uświetni wyniki osiągane przez algorytm.
+\\Wielką zaletą zastosowanego algorytmu jest fakt, iż reguły tak naprawdę nie muszą dokładnie precyzować wystąpień danych encji (tu nazwisk), ale jedynie sprzyjające temu warunki (które w połączeniu z innymi warunkami mogą definiować reguły).
 
-\section{Zastosowane technologie}
-Do implementacji znacznej czesci aplikacji pragniemy wykorzystac jezyk Python, ze wzgledu na jego perfekcyjne przystosowanie do prac nad prztwarzaniem jezyka naturalnego.
-Oczywiście za pomocą pewnych narzędzi będziemy się starali powiązać go z obecną architekturą systemu, napisanego w dużej części w języku Java.
-\subsection {Tagger} 
-Wykonano wstepny prototyp taggera w Pythonie na potrzeby testowe.
-\subsection {Rdzen} 
-Rozpoczeto prace  w Pythonie. Dodatkowo będziemy jak najszybciej starali się skorzystać z Jythona.
-\section{Zastosowane narzedzia}
-\subsection{Jython} Bridge pozwalajacy na transparentna komunikacje miedzy Pythonem a klasami Javy. Będzie niezmiernie przydatny do komunikacji Rdzenia aplikacji napisanego w pythonie z obecna architektura systemu.
+\section {Zastosowane technologie}
+Do implementacji znacznej części aplikacji wykorzystano język Python, ze względu na jego perfekcyjne przystosowanie do prac nad przetwarzaniem języka naturalnego.
+\\W związku z faktem, iż projekt SWAT jest napisany w języku Java, należało wykorzystać swojego rodzaju pomost pomiędzy naszą częścią aplikacji a dotychczasowymi interfejsami wyszukiwania encji w tekstach. W tym celu wykorzystaliśmy Jythona, czyli implementację języka Python napisaną w języku Java.
+\\Poza Jythonem korzystaliśmy z funkcji wbudowanych w język Python, związanych z przetwarzaniem tekstu oraz konwersją między różnego rodzaju kodowaniem (pozwalająca na komunikację oraz transfer danych z poziomu Javy do Pythona i na odwrót).
+
+\section {Opis zastosowanych narzędzi}
+
+\subsection {Jython} 
+Implementacja języka Python w Javie pozwalający na transparentna komunikacje miedzy Pythonem a klasami Javy. Okazał się niezastąpiony przy wiązaniu aplikacji Rdzenia z dotychczasowymi interfejsami projektu SWAT. 
+\\Dzięki wykorzystaniu zewnętrznych bibliotek związanych m.in. z kodowaniem udało się bez najmniejszych problemów wywoływać klasy napisane w Rdzeniu (w Pythonie) z poziomu Javy, jak również importować wszelakie pakiety projektu SWAT do kodu aplikacji w Pythonie.
+\\Wiecej informacji na stronie Jythona: www.jython.org
+
+\subsection{encodings}
+Moduł Pythona zawierający zbiór najważniejszych i najpopularniejszych kodowań oraz metod z nimi związanych.
+\\Dzięki niemu udało się rozwiązać problem związany z komunikacją (w szczególności przesyłaniem polskich znaków z obiektów Javy do obiektów Pythona)
+
+\subsection{egothor}
+Silnik full-text search z którego korzystaliśmy przy tworzeniu systemu.
+\\Wiecej informacji na stronie: http://www.egothor.org/
+
+\subsection{Morfologik}
+Analizator morfologiczny, słownik morfologiczny, korektor gramatyczny.
+\\Wiecej informacji na stronie: http://morfologik.blogspot.com/
 
 \section{Opis powiazania aplikacji z Interfejsem IQuantumDetector z projektu SWAT}
+Należy zaimportować odpowiednie pakiety do kodu w Javie a następnie wykorzystać metodę getJythonObject
+klasy JythonFactory. Informacje odnośnie składni znajdują się na stronie projektu Jython.
+\\Z kolei w kodzie Pythona importujemy wszystkie klasy Javy które będą nam potrzebne (zarówno te
+z projektu SWAT), a następnie korzystamy z udostępnianych przez nie metod, jak gdyby były klasami Pythona.
+
 \subsection{Kod od strony aplikacji w Javie}
 \begin{verbatim}
 import org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector;
 import jyinterface.factory.JythonFactory;
-import org.ppbw.agh.swat.hoover.smith.lexer.HtmlLexer; 
-import org.ppbw.agh.swat.hoover.smith.lexer.IResourceLexer; 
-import org.ppbw.agh.swat.hoover.smith.quantum.detection.DetectedQuantum; 
-import org.ppbw.agh.swat.hoover.smith.resourceModel.IContentSegment; 
-import org.ppbw.agh.swat.hoover.smith.resourceModel.IResourceModel; 
-import org.ppbw.agh.swat.hoover.smith.stemmer.StemmerPL; 
-import java.io.ByteArrayInputStream; 
+..
 
 public class Main {
-	public static void main(String[] args) throws Exception {
-		String shortName = "org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector";
-		Object obj = JythonFactory.getJythonObject(shortName, "test.py", "InternetDetector");
-		IQuantumDetector detector = (IQuantumDetector) obj;
-		HtmlLexer lexer = new HtmlLexer();
-		IResourceModel resourceModel = 
-			lexer.buildResourceModel(new ByteArrayInputStream("Internet Internet internet ze szkoda gadać".getBytes("UTF-8")), 
-						 "utf-8",
-						 new StemmerPL());
-
-		for (IContentSegment s : resourceModel.getLeafSegments()) {
-			System.out.println(detector.detectQuantums(s).toString());
-		}
-	}
+  public static void main(String[] args) throws Exception {
+    String shortName = "org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector";
+    Object obj = JythonFactory.getJythonObject(shortName, "test.py", "InternetDetector");
+    IQuantumDetector detector = (IQuantumDetector) obj;
+    ..
+    for (IContentSegment s : resourceModel.getLeafSegments()) {
+      System.out.println(detector.detectQuantums(s).toString());
+    }
+  }
 }
 
 \end{verbatim}
 
-\subsection{Kod testowy implementujacy test z przykladowego pliku w Pythonie}
+\subsection{Kod przykładowy implementujący test z przykładowego pliku w Pythonie}
 \begin{verbatim}
 from java.io import ByteArrayInputStream
 from java.util import ArrayList
-
-from org.ppbw.agh.swat.hoover.smith.lexer import HtmlLexer, IResourceLexer
+..
 from org.ppbw.agh.swat.hoover.smith.quantum import QuantumType
-from org.ppbw.agh.swat.hoover.smith.quantum.detection import DetectedQuantum, DetectorType, IQuantumDetector
-from org.ppbw.agh.swat.hoover.smith.resourceModel import IContentSegment, IResourceModel
-from org.ppbw.agh.swat.hoover.smith.stemmer import StemmerPL
-
 
 #from unittest import main, TestCase
 
-
 class InternetDetector(IQuantumDetector):
-    def getType(self):
-        return DetectorType.DetectionInLeafSegment
-
-    def detectQuantums(self, leafSegment):
-        dq = []
-        for word_id in range(leafSegment.getWordsCount()):
-            if leafSegment.compareWord(word_id, "Internet"):
-                dq.append(DetectedQuantum(leafSegment.getWordToken(word_id), QuantumType.NICKNAME))
-                print leafSegment.getWordToken(word_id).tokenContent
-        return ArrayList(dq)
-
+  ..
+  def detectQuantums(self, leafSegment):
+    dq = []
+    for word_id in range(leafSegment.getWordsCount()):
+      if leafSegment.compareWord(word_id, "Internet"):
+        dq.append(DetectedQuantum(leafSegment.getWordToken(word_id), QuantumType.NICKNAME))
+        print leafSegment.getWordToken(word_id).tokenContent
+      return ArrayList(dq)
 
 \end{verbatim}
+
+\section{Opis struktury folderów/plików w systemie}
+\begin{itemize}
+\item io-projekt - zawiera dane tymczasowe etc.
+\begin{itemize}
+\item build.xml - plik build.xml dla ANTa
+\item data - folder zawierający dane na których pracuje system.
+\item doc - folder zawierający tę dokumentację w formacie TeX
+\item java-lib - folder zawierający wykorzystywane biblioteki Javy
+\item java-src - kody źródłowe Javy
+\item pyner - źródła systemu (Rdzenia, Taggera oraz Generatora)
+\item python-lib - biblioteki wykorzystywane przez źródła Pythona
+\end{itemize}
+\end{itemize}
+
+\section{Misc}
+\subsection{Repozytorium}
+Repozytorium publiczne projektu znajduje się na serwerze GitHub pod adresem
+\\http://github.com/tph/io-projekt/tree
+
+\subsection{Kontakt}
+Kontakt z autorami systemu:
+\begin{itemize}
+\item Konrad Delong - konryd <at> gmail.com
+\item Antoni Piechnik - antek.piechnik <at> gmail.com
+\end{itemize}
+
 \end{document}
