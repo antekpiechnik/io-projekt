@@ -37,4 +37,32 @@ starts_with_capital = _positions_satisfying_predicate(
 
 authority = in_name_corpus
 
-all = [prefixes, suffixes, in_name_corpus, starts_with_capital]
+def _get_ngrams():
+    f = open("ngrams.dat", "r")
+    content = f.read()
+    before, after = content.split("--")
+    f.close()
+    return before.split(), after.split()
+BEFORE_NGRAMS, AFTER_NGRAMS = _get_ngrams()
+
+def ngrams_neighbours(words):
+    ret = set()
+    for n, word in enumerate(words):
+        if n > 0:
+            prev_word = words[n - 1]
+            for ngram in BEFORE_NGRAMS:
+                if ngram in prev_word:
+                    ret.add(n)
+        if n < len(words) - 1:
+            next_word = words[n + 1]
+            for ngram in AFTER_NGRAMS:
+                if ngram in next_word:
+                    ret.add(n)
+    return ret
+
+all = [prefixes, suffixes, in_name_corpus, starts_with_capital, ngrams_neighbours]
+
+if __name__ == '__main__':
+    test_input ="Czesław ma w domu kota Pan Nowak nie lubi tego kota Roman Giertych zdobywał wiedzę w Oksfordzie".split()
+    expected = set("w zdobywał Giertych kota lubi nie Nowak Pan ma".split())
+    assert set([test_input[x] for x in ngrams_neighbours(test_input)]) == expected
