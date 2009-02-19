@@ -13,7 +13,6 @@ import java.io.ByteArrayInputStream;
 public class Main {
 	public static void main(String[] args) throws Exception {
 
-        //String text = "Czesław ma w domu kota. Pan Nowak zamieszkały w Lublinie nie lubi tego kota. Roman Giertych zdobywał wiedzę w Oksfordzie. ";
         String text = "Hrabia Napoleon Stanisław Adam Feliks Zygmunt Krasiński herbu Ślepowron (ur. 19 lutego 1812 w Paryżu – zm. 23 lutego 1859 w Paryżu) – jeden z najwybitniejszych poetów polskiego romantyzmu." + 
 "Tradycyjnie Krasińskiego zwykło zaliczać się do grona tzw. Czterech Wieszczów literatury polskiej (obok Adama Mickiewicza, Juliusza Słowackiego i Cypriana Kamila Norwida), choć coraz częstsze są próby zdetronizowania Krasińskiego przez współczesną krytykę literacką." + 
 "Był potomkiem magnackiej rodziny Krasińskich II ordynatem opinogórskim, synem generała Wincentego i Marii Radziwiłłówny. Jego ojcem chrzestnym był cesarz Napoleon I." + 
@@ -25,7 +24,8 @@ public class Main {
 "W grudniu 1838 roku w Neapolu nawiązał romans z Delfiną Potocką, najsilniejsze z uczuć poety, gorąco odwzajemniane. Stosunek miłosny przetrwał do roku 1846, później przekształcił się w przyjaźń i wydatnie odbił się w twórczości poety. W roku 1839 w Mediolanie zaprzyjaźnił się z Augustem Cieszkowskim, była to najtrwalsza i najściślejsza z przyjaźni poety i wzajemnie wywarła wpływ na dzieje myśli ich obu (korespondencję wydał Józef Kallenbach, 1912, 2 tomy). W lipcu 1843 roku pod wpływem ojca ożenił się z Elizą Branicką (1820-1876), polską malarką i dyletantką, której uczucie i zalety charakteru ocenił dopiero później, gdy ochłódł jego stosunek z Delfiną.";
 
 		String shortName = "org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector";
-        String[] detectorNames = { "NgramsNeighboursDetector", "PrefixesDetector", "SuffixesDetector", "CorpusDetector", "CapitalDetector"};
+        String[] detectorNames = { "NgramsNeighboursDetector", "PrefixesDetector", "SuffixesDetector", "CorpusDetector",
+				"CapitalDetector", "CombinedDetector", "CombinedDetector2", "SmartDetector"};
         for (String detectorName : detectorNames) {
             Object obj = JythonFactory.getJythonObject(shortName, "pyner/ngrams_detector.py", detectorName);
             IQuantumDetector detector = (IQuantumDetector) obj;

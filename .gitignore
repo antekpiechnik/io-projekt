@@ -6,3 +6,4 @@ java-classes
 java-lib/cachedir
 python-lib/*$py.class
 python-lib/**/*$py.class
+**/*$py.class
