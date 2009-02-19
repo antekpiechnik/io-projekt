@@ -1,17 +1,32 @@
 #encoding=utf-8
-"""Functions here given a sentence of regular text return positions of all the
-words matching its rule"""
+"""
+This module contains simple rule matching functions.
+
+These functions given a sentence in a form of a list of words
+return a list with positions of words matching given rule.
+
+Simple rule functions presented here may be used to build more complex
+matchers.
+"""
+
+import os
+
 try:
     set
-except:
+except NameError:
     from sets import Set as set
 
-from java.lang import System
+try:
+    from java.lang import System
+    ENC = System.getProperty("file.encoding")
+except ImportError:
+    import sys
+    ENC = sys.getdefaultencoding()
 
-ENC = System.getProperty("file.encoding")
 
 PREFIXES = set("dr. pan pani".split())
 def prefixes(words):
+    """Finds words following one of arbitrary prefixes."""
     ret = []
     for n, word in enumerate(words):
         if word.lower() in PREFIXES and n + 1 < len(words):
@@ -20,6 +35,7 @@ def prefixes(words):
 
 SUFFIXES = set("był była został została zamieszkały zamieszkała jest".split())
 def suffixes(words):
+    """Finds words followed by one of arbitrary suffixes."""
     ret = []
     for n, word in enumerate(words):
         if word.encode(ENC) in SUFFIXES and n > 1:
@@ -27,26 +43,34 @@ def suffixes(words):
     return ret
 
 def _get_names():
-    f = open("data/names.iso", "r")
+    filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), 
+                                            ".." , "data", "names.iso"))
+    f = open(filepath, "r")
     c = f.read().decode("iso-8859-2")
     f.close()
     return set([line.split()[1] for line in c.split("\n") if line.strip()])
 
 NAMES = _get_names()
 
-def _positions_satisfying_predicate(predicate):
+def _positions_satisfying_predicate(predicate, doc=""):
     def ret(words):
         return [n for n, word in enumerate(words) if predicate(word)]
+    ret.__doc__ = doc
     return ret
 
-in_name_corpus = _positions_satisfying_predicate(lambda w: w in NAMES)
+in_name_corpus_doc = "Finds words present in name corpus (data/names.iso)."
+in_name_corpus = _positions_satisfying_predicate(lambda w: w in NAMES, in_name_corpus_doc)
+
+starts_with_capital_doc = "Finds words starting with capital letter."
 starts_with_capital = _positions_satisfying_predicate(
-                        lambda w: w[0] == w[0].upper())
+                        lambda w: w[0] == w[0].upper(), starts_with_capital_doc)
 
 authority = in_name_corpus
 
 def _get_ngrams():
-    f = open("ngrams.dat", "r")
+    filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), 
+                                            ".." , "ngrams.dat"))
+    f = open(filepath, "r")
     content = f.read()
     before, after = content.split("--")
     f.close()
@@ -54,6 +78,10 @@ def _get_ngrams():
 BEFORE_NGRAMS, AFTER_NGRAMS = _get_ngrams()
 
 def ngrams_neighbours(words):
+    """
+    Finds words surrounded by at least one word containing
+    ngrams popular in name predecessors of successors
+    """
     ret = set()
     for n, word in enumerate(words):
         if n > 0:
@@ -68,6 +96,7 @@ def ngrams_neighbours(words):
                     ret.add(n)
     return ret
 
+__all__ = ['prefixes', 'suffixes', 'in_name_corpus', 'starts_with_capital', 'ngrams_neighbours']
 all = [prefixes, suffixes, in_name_corpus, starts_with_capital, ngrams_neighbours]
 
 if __name__ == '__main__':
