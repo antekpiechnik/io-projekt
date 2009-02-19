@@ -1,5 +1,6 @@
 *.pyc
 *.swp
+doc/sphinx/.build/*
 data/ngrams_distribution.dat
 .DS_Store
 java-classes
