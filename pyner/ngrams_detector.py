@@ -9,31 +9,7 @@ from org.ppbw.agh.swat.hoover.smith.resourceModel import IContentSegment, IResou
 from org.ppbw.agh.swat.hoover.smith.stemmer import StemmerPL
 
 from sets import Set as set
-from rules import *
-
-ENC = System.getProperty("file.encoding")
-f = open("ngrams.dat", "r")
-content = f.read()
-content = content.decode(ENC)
-before, after = content.split("--")
-f.close()
-BEFORE_NGRAMS = before.split()
-AFTER_NGRAMS = after.split()
-
-def ngrams_neighbours(words):
-    ret = set()
-    for n, word in enumerate(words):
-        if n > 0:
-            prev_word = words[n - 1]
-            for ngram in BEFORE_NGRAMS:
-                if ngram in prev_word:
-                    ret.add(n)
-        if n < len(words) - 1:
-            next_word = words[n + 1]
-            for ngram in AFTER_NGRAMS:
-                if ngram in next_word:
-                    ret.add(n)
-    return ret
+from pyner import rules
 
 
 def gen_detector(rule):
@@ -46,4 +22,8 @@ def gen_detector(rule):
             return ArrayList([DetectedQuantum(leafSegment.getWordToken(wid), QuantumType.SURNAME) for wid in rule(words)])
     return Detector
 
-NgramsDetector = gen_detector(ngrams_neighbours)
+NgramsNeighboursDetector    = gen_detector(rules.ngrams_neighbours)
+PrefixesDetector            = gen_detector(rules.prefixes)
+SuffixesDetector            = gen_detector(rules.suffixes)
+CorpusDetector              = gen_detector(rules.in_name_corpus)
+CapitalDetector             = gen_detector(rules.starts_with_capital)

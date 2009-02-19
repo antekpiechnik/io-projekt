@@ -13,21 +13,25 @@ import java.io.ByteArrayInputStream;
 public class Main {
 	public static void main(String[] args) throws Exception {
 
-        String text = "Czesław ma w domu kota. Pan Nowak nie lubi tego kota. Roman Giertych zdobywał wiedzę w Oksfordzie. ";
+        String text = "Czesław ma w domu kota. Pan Nowak zamieszkały w Lublinie nie lubi tego kota. Roman Giertych zdobywał wiedzę w Oksfordzie. ";
 
 		String shortName = "org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector";
-		Object obj = JythonFactory.getJythonObject(shortName, "pyner/ngrams_detector.py", "NgramsDetector");
-		IQuantumDetector detector = (IQuantumDetector) obj;
-		HtmlLexer lexer = new HtmlLexer();
-		IResourceModel resourceModel = 
-			lexer.buildResourceModel(new ByteArrayInputStream(text.getBytes("UTF-8")), 
-						 "utf-8",
-						 new StemmerPL());
+        String[] detectorNames = { "NgramsNeighboursDetector", "PrefixesDetector", "SuffixesDetector", "CorpusDetector", "CapitalDetector"};
+        for (String detectorName : detectorNames) {
+            Object obj = JythonFactory.getJythonObject(shortName, "pyner/ngrams_detector.py", detectorName);
+            IQuantumDetector detector = (IQuantumDetector) obj;
+            HtmlLexer lexer = new HtmlLexer();
+            IResourceModel resourceModel =
+                lexer.buildResourceModel(new ByteArrayInputStream(text.getBytes("UTF-8")),
+                             "utf-8",
+                             new StemmerPL());
 
-		for (IContentSegment s : resourceModel.getLeafSegments()) {
-            for (DetectedQuantum dq : detector.detectQuantums(s)) {
-                System.out.println(dq.quantum.getContent());
+            System.out.println(detectorName + ":");
+            for (IContentSegment s : resourceModel.getLeafSegments()) {
+                for (DetectedQuantum dq : detector.detectQuantums(s)) {
+                    System.out.println("  " + dq.quantum.getContent());
+                }
             }
-		}
+        }
 	}
 }
