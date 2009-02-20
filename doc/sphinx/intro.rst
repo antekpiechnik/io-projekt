@@ -69,19 +69,23 @@ Reguły kontekstowe:
   * Reszta tytułów zawodowych.
   * Słowo 'pan' poprzedza nazwisko
   * Słowo 'pani' poprzedza nazwisko
-  * Czasownik w trzeciej osobie liczby pojedynczej następuje po nazwisku (czasownik w formie męskiej czy tez damskiej)
+  * Czasownik w trzeciej osobie liczby pojedynczej następuje po nazwisku
+    (czasownik w formie męskiej czy tez damskiej)
   * Imiesłowy takie jak 'zamieszkały', 'urodzony'.
 
 Reguły bazujące na innych encjach:
 
   * Imię poprzedza nazwisko
-  * Przezwisko znajduje się na 2 gim miejscu w wyrażeniu trójsłownym (np. Antoni 'Tosiek' Piechnik)
-  * Przezwisko znajduje się na 3 cim miejscu w wyrażeniu trójsłownym (np. Antoni Piechnik 'Tosiek')
+  * Przezwisko znajduje się na 2 gim miejscu w wyrażeniu trójsłownym (np. Antoni
+    'Tosiek' Piechnik)
+  * Przezwisko znajduje się na 3 cim miejscu w wyrażeniu trójsłownym (np. Antoni
+    Piechnik 'Tosiek')
 
 Reguły bazujące na regułach ortograficznych:
 
   * Nazwisko zaczyna się dużą literą
-  * Nazwisko jest częścią dwu lub trzy wyrazowego wyrażenia w których wszystkie elementy są pisane wielką literą.
+  * Nazwisko jest częścią dwu lub trzy wyrazowego wyrażenia w których wszystkie
+    elementy są pisane wielką literą.
 
 Reguły n-gramowe:
 
@@ -98,3 +102,64 @@ muszą dokładnie precyzować wystąpień danych encji (tu nazwisk), ale jedynie
 sprzyjające temu warunki (które w połączeniu z innymi warunkami mogą definiować
 reguły).
 
+
+Zastosowane technologie
+=======================
+
+Do implementacji znacznej części aplikacji wykorzystano język Python, ze względu
+na jego perfekcyjne przystosowanie do prac nad przetwarzaniem języka
+naturalnego.
+
+W związku z faktem, iż projekt SWAT jest napisany w języku Java, należało
+wykorzystać swojego rodzaju pomost pomiędzy naszą częścią aplikacji a
+dotychczasowymi interfejsami wyszukiwania encji w tekstach. W tym celu
+wykorzystaliśmy Jythona, czyli implementację języka Python napisaną w języku
+Java.
+
+Poza Jythonem korzystaliśmy z funkcji wbudowanych w język Python, związanych z
+przetwarzaniem tekstu oraz konwersją między różnego rodzaju kodowaniem
+(pozwalająca na komunikację oraz transfer danych z poziomu Javy do Pythona i na
+odwrót).
+
+Opis zastosowanych narzędzi
+===========================
+
+Jython
+------
+
+Implementacja języka Python w Javie pozwalający na
+transparentna komunikacje miedzy Pythonem a klasami Javy. Okazał się
+niezastąpiony przy wiązaniu aplikacji Rdzenia z dotychczasowymi interfejsami
+projektu SWAT. 
+
+Dzięki wykorzystaniu zewnętrznych bibliotek związanych m.in. z kodowaniem udało
+się bez najmniejszych problemów wywoływać klasy napisane w Rdzeniu (w Pythonie)
+z poziomu Javy, jak również importować wszelakie pakiety projektu SWAT do kodu
+aplikacji w Pythonie.
+
+Wiecej informacji na stronie Jythona: http://www.jython.org
+
+encodings
+---------
+
+Moduł Pythona zawierający zbiór najważniejszych i
+najpopularniejszych kodowań oraz metod z nimi związanych.
+
+Dzięki niemu udało się rozwiązać problem związany z komunikacją (w szczególności
+przesyłaniem polskich znaków z obiektów Javy do obiektów Pythona)
+
+egothor
+-------
+
+Silnik full-text search z którego korzystaliśmy przy
+tworzeniu systemu.
+
+Wiecej informacji na stronie: http://www.egothor.org/
+
+Morfologik
+----------
+
+Analizator morfologiczny, słownik morfologiczny,
+korektor gramatyczny.
+
+Wiecej informacji na stronie: http://morfologik.blogspot.com/

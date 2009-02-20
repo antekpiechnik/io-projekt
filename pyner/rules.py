@@ -1,12 +1,12 @@
 #encoding=utf-8
 """
-This module contains simple rule matching functions.
+W tym module znajdują się funkcje implementujące reguły proste. Wszystkie mają
+taki sam prosty interfejs: otrzymują pojedynczy argument będący listą słów w
+zdaniu i zwracają listę pozycji, na których znajdują się słowa dopasowane wg.
+danej reguły. 
 
-These functions given a sentence in a form of a list of words
-return a list with positions of words matching given rule.
-
-Simple rule functions presented here may be used to build more complex
-matchers.
+Dzięki takiej implementacji, łatwo można tworzyć reguły wyższego rzędu,
+korzystające z reguł prostych.
 """
 
 import os
@@ -26,7 +26,8 @@ except ImportError:
 
 PREFIXES = set("dr. pan pani".split())
 def prefixes(words):
-    """Finds words following one of arbitrary prefixes."""
+    """Znajduje słowa poprzedzone którymś z ustalonych (arbitralnie)
+    poprzedników."""
     ret = []
     for n, word in enumerate(words):
         if word.lower() in PREFIXES and n + 1 < len(words):
@@ -35,7 +36,8 @@ def prefixes(words):
 
 SUFFIXES = set("był była został została zamieszkały zamieszkała jest".split())
 def suffixes(words):
-    """Finds words followed by one of arbitrary suffixes."""
+    """Znajduje słowa poprzedzające któryś z ustalonych (arbitralnie)
+    następników."""
     ret = []
     for n, word in enumerate(words):
         if word.encode(ENC) in SUFFIXES and n > 1:
@@ -58,10 +60,10 @@ def _positions_satisfying_predicate(predicate, doc=""):
     ret.__doc__ = doc
     return ret
 
-in_name_corpus_doc = "Finds words present in name corpus (data/names.iso)."
+in_name_corpus_doc = "Znajduje słowa znajdujące się w korpusie nazwisk (data/names.iso)."
 in_name_corpus = _positions_satisfying_predicate(lambda w: w in NAMES, in_name_corpus_doc)
 
-starts_with_capital_doc = "Finds words starting with capital letter."
+starts_with_capital_doc = "Znajduje słowa rozpoczynające się wielką literą."
 starts_with_capital = _positions_satisfying_predicate(
                         lambda w: w[0] == w[0].upper(), starts_with_capital_doc)
 
@@ -79,8 +81,8 @@ BEFORE_NGRAMS, AFTER_NGRAMS = _get_ngrams()
 
 def ngrams_neighbours(words):
     """
-    Finds words surrounded by at least one word containing
-    ngrams popular in name predecessors of successors
+    Znajduje słowa, w których poprzednikach, lub następnikach znajdują się
+    ngramy charakterystyczne dla poprzedników lub następników.
     """
     ret = set()
     for n, word in enumerate(words):
