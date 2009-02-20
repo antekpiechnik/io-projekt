@@ -23,6 +23,13 @@ except ImportError:
     import sys
     ENC = sys.getdefaultencoding()
 
+def _get_relative_filepath(*path):
+    try:
+        import java
+        return "/".join(path) # when invoking from Jython always correct cwd
+    except ImportError:
+        path = (os.path.dirname(__file__), '..') + path
+        return os.path.abspath(*path)
 
 PREFIXES = set("dr. pan pani".split())
 def prefixes(words):
@@ -45,8 +52,7 @@ def suffixes(words):
     return ret
 
 def _get_names():
-    filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), 
-                                            ".." , "data", "names.iso"))
+    filepath = _get_relative_filepath('data', 'names.iso')
     f = open(filepath, "r")
     c = f.read().decode("iso-8859-2")
     f.close()
@@ -70,8 +76,7 @@ starts_with_capital = _positions_satisfying_predicate(
 authority = in_name_corpus
 
 def _get_ngrams():
-    filepath = os.path.abspath(os.path.join(os.path.dirname(__file__), 
-                                            ".." , "ngrams.dat"))
+    filepath = _get_relative_filepath("ngrams.dat")
     f = open(filepath, "r")
     content = f.read()
     before, after = content.split("--")

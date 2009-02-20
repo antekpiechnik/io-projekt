@@ -27,7 +27,7 @@ public class Main {
         String[] detectorNames = { "NgramsNeighboursDetector", "PrefixesDetector", "SuffixesDetector", "CorpusDetector",
 				"CapitalDetector", "CombinedDetector", "CombinedDetector2", "SmartDetector"};
         for (String detectorName : detectorNames) {
-            Object obj = JythonFactory.getJythonObject(shortName, "pyner/ngrams_detector.py", detectorName);
+            Object obj = JythonFactory.getJythonObject(shortName, "pyner/detectors.py", detectorName);
             IQuantumDetector detector = (IQuantumDetector) obj;
             HtmlLexer lexer = new HtmlLexer();
             IResourceModel resourceModel =
