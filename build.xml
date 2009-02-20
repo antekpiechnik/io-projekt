@@ -31,13 +31,23 @@
 
   <target name="clean" description="clean up" >
     <delete dir="${build}"/>
-		<exec executable="make" dir="doc">
-			<arg value="clean"/>
-		</exec>
+    <exec executable="make" dir="doc">
+      <arg value="clean"/>
+    </exec>
   </target>
 
 	<target name="doc">
-		<exec executable="make" dir="doc"/>
+		<exec executable="make" dir="doc">
+			<arg value="latex"/>
+		</exec>
+		<exec executable="make" dir="doc/.build/latex">
+			<arg value="all-pdf"/>
+		</exec>
+		<copy todir=".">
+			<fileset dir="doc/.build/latex">
+				<include name="*.pdf"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="run" depends="compile">

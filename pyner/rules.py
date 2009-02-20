@@ -29,7 +29,7 @@ def _get_relative_filepath(*path):
         return "/".join(path) # when invoking from Jython always correct cwd
     except ImportError:
         path = (os.path.dirname(__file__), '..') + path
-        return os.path.abspath(*path)
+        return os.path.abspath(os.path.join(*path))
 
 PREFIXES = set("dr. pan pani".split())
 def prefixes(words):
