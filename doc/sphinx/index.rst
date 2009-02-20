@@ -1,20 +1,18 @@
-.. Pyner documentation master file, created by sphinx-quickstart on Thu Feb 19 15:48:36 2009.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Witaj w dokumentacji systemu Pyner
+==================================
 
-Welcome to Pyner's documentation!
-=================================
-
-Contents:
+Zawartość:
 
 .. toctree::
    :maxdepth: 2
 
    intro
    rules
+   detectors
+   supplement
 
-Indices and tables
-==================
+Tabele i indeksy
+================
 
 * :ref:`genindex`
 * :ref:`modindex`

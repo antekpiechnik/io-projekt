@@ -113,10 +113,10 @@ naturalnego.
 W związku z faktem, iż projekt SWAT jest napisany w języku Java, należało
 wykorzystać swojego rodzaju pomost pomiędzy naszą częścią aplikacji a
 dotychczasowymi interfejsami wyszukiwania encji w tekstach. W tym celu
-wykorzystaliśmy Jythona, czyli implementację języka Python napisaną w języku
+wykorzystano Jythona, czyli implementację języka Python napisaną w języku
 Java.
 
-Poza Jythonem korzystaliśmy z funkcji wbudowanych w język Python, związanych z
+Poza Jythonem korzystano z funkcji wbudowanych w język Python, związanych z
 przetwarzaniem tekstu oraz konwersją między różnego rodzaju kodowaniem
 (pozwalająca na komunikację oraz transfer danych z poziomu Javy do Pythona i na
 odwrót).
@@ -151,7 +151,7 @@ przesyłaniem polskich znaków z obiektów Javy do obiektów Pythona)
 egothor
 -------
 
-Silnik full-text search z którego korzystaliśmy przy
+Silnik full-text search z którego korzystano przy
 tworzeniu systemu.
 
 Wiecej informacji na stronie: http://www.egothor.org/
@@ -163,3 +163,44 @@ Analizator morfologiczny, słownik morfologiczny,
 korektor gramatyczny.
 
 Wiecej informacji na stronie: http://morfologik.blogspot.com/
+
+
+Podręcznik użytkownika
+======================
+
+Korzystanie z klas Jythona w Javie
+----------------------------------
+
+Aby móc skorzystać z detektorów zaimplementowanych w Jythonie na poziomie Javy,
+należy najpierw je zimportować przy użyciu klasy JythonFactory
+`jyinterface.factory`:
+
+.. code-block:: java
+
+	String interfaceName = "org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector";
+	Object obj = JythonFactory.getJythonObject(interfaceName,
+				"pyner/detectors.py", "CapitalDetector");
+	IQuantumDetector detector = (IQuantumDetector) obj;
+
+Następnie można korzystać z detektora tak jak z każdej klasy implementującej
+interfejs `org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector`.
+
+Częścią projektu jest klasa `agh.io.Main` w której zamieszczono przykładowe
+użycie detektorów zaimplementowanych w Jythonie.
+
+
+Implementacja detektorów w Jythonie
+-----------------------------------
+
+Detektory w projekcie pyner to proste funkcje o prostym interfejsie (opisanym w
+dokumentacji modułu :mod:`pyner.rules`). Zgodnośc z interfejsem 
+`org.ppbw.agh.swat.hoover.smith.quantum.detection.IQuantumDetector` uzyskano
+generując klasy na podstawie funkcji. Zajmuje się tym funkcja
+:func:`pyner.detectors.gen_detector`, która otrzymując obiekt funkcji zwraca obiekt
+metaklasy. Przykładowe użycie funkcji gen_detector::
+
+	NgramsNeighboursDetector    = gen_detector(rules.ngrams_neighbours)
+	PrefixesDetector            = gen_detector(rules.prefixes)
+	SuffixesDetector            = gen_detector(rules.suffixes)
+	CorpusDetector              = gen_detector(rules.in_name_corpus)
+	CapitalDetector             = gen_detector(rules.starts_with_capital)
