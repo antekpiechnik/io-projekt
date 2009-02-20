@@ -39,6 +39,7 @@
 	<target name="doc">
 		<exec executable="make" dir="doc">
 			<arg value="latex"/>
+			<arg value="html"/>
 		</exec>
 		<exec executable="make" dir="doc/.build/latex">
 			<arg value="all-pdf"/>
