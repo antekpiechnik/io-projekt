@@ -165,6 +165,27 @@ korektor gramatyczny.
 Wiecej informacji na stronie: http://morfologik.blogspot.com/
 
 
+Wyniki
+======
+
+Reguły proste
+-------------
+
+Zgodnie z oczekiwaniami, wyniki reguł prostych charatkeryzowały się skrajnie
+różnymi wartościami współczynników. Albo osiągały wysokie pokrycie kosztem
+dokładności (reguła wielkich liter), albo przeciwnie - wysoką dokładność
+kosztem pokrycia (poszukiwanie w liście nazwisk). Kompromis pomiędzy tymi
+wynikami udało się osiągnąć dzięki zastosowaniu reguł złożonych.
+
+Reguły złożone
+--------------
+
+Reguły złożone pomogły zamortyzować wspomniane wyżej różnice. Dzięki złożeniu
+reguł w nową, dopasowującą słowo jedynie gdy odpowiednio duża ich część (próg)
+to robiła, udało się nieco płynniej kontrolować relację między dokładnością a
+pokryciem. Osiągnięto to dzięki odpowiedniemu dopasowywaniu wartości progu.
+
+
 Podręcznik użytkownika
 ======================
 
