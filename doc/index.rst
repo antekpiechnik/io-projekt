@@ -10,10 +10,3 @@ Zawartość:
    rules
    detectors
    supplement
-
-Tabele i indeksy
-================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
